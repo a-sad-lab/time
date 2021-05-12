@@ -143,7 +143,7 @@ export default class Home extends Component {
           </p>
         </header>
         <canvas id="canvas" width="150" height="150" style={{border: '1px solid red'}}></canvas>
-        <iframe style={{width: '98%', height: '350px'}} src="http://localhost:3000/record/form"></iframe>
+        <iframe style={{width: '98%', height: '350px'}} src="/record/form"></iframe>
         {/* <iframe style={{width: '98%', height: '350px'}} src="https://baidu.com"></iframe>
         <iframe style={{width: '98%', height: '250px'}} src="https://cn.bing.com"></iframe> */}
         <p>I am a line!</p>
