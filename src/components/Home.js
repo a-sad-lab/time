@@ -48,7 +48,7 @@ export default class Home extends Component {
     ctx.save();
     ctx.lineWidth = 5;
     for (i = 0; i < 60; i++) {
-      if (i % 5!= 0) {
+      if (i % 5!== 0) {
         ctx.beginPath();
         ctx.moveTo(117, 0);
         ctx.lineTo(120, 0);
@@ -143,7 +143,7 @@ export default class Home extends Component {
           </p>
         </header>
         <canvas id="canvas" width="150" height="150" style={{border: '1px solid red'}}></canvas>
-        <iframe style={{width: '98%', height: '350px'}} src="/record/form"></iframe>
+        <iframe style={{width: '98%', height: '350px'}} title="my iframe" src="/record/form"></iframe>
         {/* <iframe style={{width: '98%', height: '350px'}} src="https://baidu.com"></iframe>
         <iframe style={{width: '98%', height: '250px'}} src="https://cn.bing.com"></iframe> */}
         <p>I am a line!</p>
