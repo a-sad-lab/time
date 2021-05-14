@@ -3,18 +3,18 @@ import { Recorder } from "timecatjs";
 import logo from "../logo.svg";
 
 export default class Home extends Component {
-  recorder = Recorder;
+  recorder = undefined;
   async start() {
     this.recorder = new Recorder();
   }
   async componentWillUnmount() {
-    this.recorder.destroy && this.recorder?.destroy();
+    this.recorder && this.recorder.destroy && this.recorder.destroy();
   }
   async stop() {
-    this.recorder?.destroy();
+    this.recorder && this.recorder.destroy && this.recorder.destroy();
   }
   async clear() {
-    this.recorder.clearDB && this.recorder?.clearDB()
+    this.recorder && this.recorder.clearDB && this.recorder.clearDB()
   }
   draw = function draw() {
     var now = new Date();

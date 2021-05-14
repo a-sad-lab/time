@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import { Player } from "timecatjs";
 
 export default class Replay extends Component {
-  player = Player;
+  player = undefined;
   async componentDidMount() {
     this.player = new Player({
       target: ".timecat-replay"
     });
   }
   async componentWillUnmount() {
-    this.player?.destroy()
+    this.player.destroy && this.player.destroy()
   }
   render() {
     return (
