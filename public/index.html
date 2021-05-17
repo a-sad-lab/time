@@ -29,37 +29,28 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!-- <script src="https://unpkg.com/timecatjs"></script> -->
-    <!-- <button onClick="start()">start</button>
-    <button onClick="stop()">stop</button>
-    <button onClick="clear()">clear</button>
-    <button onClick="play()">play</button>
-    <button onClick="stopPlay()">stopPlay</button> -->
-    <!-- <iframe src="http://localhost:3000/record/form"></iframe> -->
-    <!-- <div id="timecat-replay" style="width: 100vw; height: 100vh; border: 1px solid red;"></div>
+    <div id="pt" style="border: 1px solid red; margin: 0 auto; width: 100%; height: 640px"></div>
+    <script src="https://unpkg.com/timecatjs"></script>
     <script>
-      const { Recorder, Player } = window.TimeCat
-      let recorder = null
-      let player = null
-      function start() {
-        recoder = new Recorder()
-      }
-      function stop() {
-        recoder && recoder.destroy()
-      }
-      function clear() {
-        recoder && recorder.clearDB()
-      }
-
-      function play() {
-        player = new Player({
-          target: "#timecat-replay"
-        });
-      }
-      function stopPlay() {
-        player && player.destroy()
-      }
-    </script> -->
+      window.addEventListener('DOMContentLoaded', function() {
+        const { Recorder, Player } = window.TimeCat
+        if(window.irec) {
+          window.irec.destroy()
+          window.irec.clearDB()
+        }
+        window.irec = new Recorder()
+        if(window.ipl) {
+          window.ipl.destroy()
+        }
+        setTimeout(function() {
+          window.irec.destroy()
+          window.ipl = new Player({
+            target: '#pt'
+          });
+        }, 10000)
+      })
+    </script>
+    
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
