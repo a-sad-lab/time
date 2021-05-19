@@ -1,41 +1,104 @@
 import React, { Component, useState, useEffect } from "react";
-// import { Recorder, Player } from "timecatjs";
+import { Recorder, Player } from "timecatjs";
 // import * as rrweb from 'rrweb'
 // import rrwebPlayer from 'rrweb-player'
 import logo from "../logo.svg";
 
-let events = []
-let stopFn
-
-
 export default function Home() {
 
-  // const [rec, updateRec] = useState()
-  // const [player, updatePlayer] = useState()
+  const [rec, updateRec] = useState()
+  const [player, updatePlayer] = useState()
 
-  // useEffect(() => () => {
-  //   stop()
-  //   clear()
-  // })
+  useEffect(() => () => {
+    stop()
+    clear()
+  })
+
+  function uploadService(records) {
+    return fetch('http://localhost:5000/records', {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(records)
+    })
+  }
+
+  function clearRemote() {
+    return fetch('http://localhost:5000/records', {
+        method: 'delete'
+    })
+  }
 
   // function start() {
   //   updateRec(new Recorder())
   // }
+  async function start() {
+    await clearRemote()
+    const rec = new Recorder()
+    rec.onData(record => {
+      addRecord(record || {key: window.location.href, record})
+    })
 
-  // function stop() {
-  //   rec && rec.destroy()
-  // }
+    const upLoader = (options = { interval: 2000, max: 30 }) => {
+        const records = []
+        const { max, interval } = options
+        let timer
 
-  // function clear() {
-  //   rec && rec.clearDB()
-  //   player && player.destroy()
-  // }
+        return function (record) {
+            if (record) {
+                records.push(record)
+            }
+            if (!timer && records.length) {
+                timer = window.setTimeout(uploadRecords, interval)
+            }
+        }
+
+        async function uploadRecords() {
+            clearTimeout(timer)
+            timer = undefined
+            const maxIndex = Math.min(max, records.length)
+            return uploadService(records.slice(0, maxIndex))
+                .then(() => {
+                    records.splice(0, maxIndex)
+                    if (records.length) {
+                        addRecord()
+                    }
+                })
+        }
+    }
+
+    const addRecord = upLoader()
+
+    // updateRec(rec)
+  }
+
+  function stop() {
+    rec && rec.destroy()
+  }
+
+  function clear() {
+    rec && rec.clearDB()
+    player && player.destroy()
+  }
 
   // function play() {
   //   updatePlayer(new Player({
   //     target: '#pt'
   //   }))
   // }
+  async function play() {
+    const records = await getRecords()
+    records.length > 0 && new Player({
+        target: '#pt',
+        records
+    })
+
+    function getRecords() {
+      return fetch('http://localhost:5000/records')
+          .then(res => res.json())
+    }
+  }
 
   function draw() {
     var now = new Date();
@@ -140,7 +203,7 @@ export default function Home() {
 
   return (
     <div className="App">
-      {/* <div id="pt" style={{border: '1px solid red', margin: "0 auto", width: "600", height: "400"}}></div> */}
+      <div id="pt" style={{border: '1px solid aqua', margin: "0 auto", width: "600", height: "400"}}></div>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -156,14 +219,14 @@ export default function Home() {
         </a>
         
         <p>
-          {/* <button onClick={start}>start</button>
+          <button onClick={start}>start</button>
           *
           <button onClick={stop}>stop</button>
           *
           <button onClick={play}>play</button>
           *
           <button onClick={clear}>clear</button>
-          * */}
+          *
           <button onClick={draw}>draw</button>
         </p>
       </header>
